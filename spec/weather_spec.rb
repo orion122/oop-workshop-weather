@@ -1,6 +1,4 @@
 RSpec.describe Weather do
-  let(:city) { 'Moscow' }
-
   class Service
     def self.make_request(city)
       {
@@ -10,16 +8,18 @@ RSpec.describe Weather do
     end
   end
 
-  let(:weather) {
-    Weather::Weather.new(
+  before do
+    weather = Weather::Weather.new(
       'my_service',
-      { 'my_service'=> Service })
-  }
+      { 'my_service'=> Service }
+    )
+    @city = 'Moscow'
+    @request = weather.get_info(@city)
+  end
 
   describe '#get_info' do
     context 'pass new service' do
-      subject { weather.get_info(city) }
-      it { is_expected.to eq(Service.make_request(city)) }
+      it_is_asserted_by { expect(@request).to eq(Service.make_request(@city)) }
     end
   end
 end
