@@ -1,30 +1,49 @@
 require 'weather/version'
-require 'open-uri'
+require 'net/http'
 require 'json'
 
 
 module Weather
   class Metaweather
-    URL = 'https://www.metaweather.com/api'
+    HOST = 'www.metaweather.com'
+
+    attr_reader :http_client
+
+    def initialize(http_client: Net::HTTP, key: '')
+      @http_client = http_client
+    end
 
     def make_request(city)
       location_id = get_location_id(city)
-      response = open("#{URL}/location/#{location_id}").read
+      uri = URI::HTTPS.build(
+        host: HOST,
+        path: "/api/location/#{location_id}/"
+      )
+      response = http_client.get(uri)
       JSON.parse(response)
     end
 
     def get_location_id(city)
-      response = open("#{URL}/location/search/?query=#{city}").read
+      uri = URI("https://#{HOST}/api/location/search/?query=#{city}")
+      response = http_client.get(uri)
       JSON.parse(response)[0]['woeid']
     end
   end
 
 
   class Apixu
-    URL = 'http://api.apixu.com/v1/forecast.json?key=be33701f8d2a4beeae864603191002&q='
+    URL = 'http://api.apixu.com/v1/forecast.json?key='
+
+    attr_reader :http_client, :key
+
+    def initialize(http_client: Net::HTTP, key: '')
+      @http_client = http_client
+      @key = key
+    end
 
     def make_request(city)
-      response = open("#{URL}#{city}").read
+      uri = URI("#{URL}#{key}&q=#{city}")
+      response = http_client.get(uri)
       JSON.parse(response)
     end
   end
@@ -32,13 +51,13 @@ module Weather
 
   class Weather
     SERVICES = {
-      'metaweather' => ::Weather::Metaweather.new,
-      'apixu' => ::Weather::Apixu.new
+      'metaweather' => ::Weather::Metaweather,
+      'apixu' => ::Weather::Apixu
     }
 
-    def initialize(service_name, options = {})
-      services = SERVICES.merge(options)
-      @service = services[service_name]
+    def initialize(service_name, key, services = {})
+      services = SERVICES.merge(services)
+      @service = services[service_name].new(key: key)
     end
 
     def get_info(city)
