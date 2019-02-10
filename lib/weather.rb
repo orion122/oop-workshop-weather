@@ -36,11 +36,13 @@ module Weather
       'apixu' => ::Weather::Apixu.new
     }
 
-    def initialize(service_name)
-      @service = SERVICES[service_name]
+    def initialize(service_name, options = {})
+      services = SERVICES.merge(options)
+      @service = services[service_name]
     end
 
     def get_info(city)
+      puts @service
       @service.make_request(city)
     end
   end
