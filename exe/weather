@@ -9,4 +9,4 @@ opts = Slop.parse do |o|
   o.string '-c', '--city', 'a service', default: 'moscow'
 end
 
-puts Weather::Weather.new(service_name: opts[:service]).get_info(city: opts[:city])
+puts Weather::Weather.new(opts[:service]).get_info(opts[:city])

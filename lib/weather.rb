@@ -7,7 +7,7 @@ module Weather
   class Metaweather
     URL = 'https://www.metaweather.com/api/location/search/?query='
 
-    def make_request(city: 'moscow')
+    def make_request(city)
       uri = URI(URL + city)
       response = Net::HTTP.get(uri)
       JSON.parse(response)
@@ -18,7 +18,7 @@ module Weather
   class Apixu
     URL = 'http://api.apixu.com/v1/forecast.json?key=be33701f8d2a4beeae864603191002&q='
 
-    def make_request(city: 'moscow')
+    def make_request(city)
       uri = URI(URL + city)
       response = Net::HTTP.get(uri)
       JSON.parse(response)
@@ -32,12 +32,12 @@ module Weather
       'apixu' => ::Weather::Apixu.new
     }
 
-    def initialize(service_name: 'metaweather')
+    def initialize(service_name)
       @service = SERVICES[service_name]
     end
 
-    def get_info(city: 'moscow')
-      @service.make_request(city: city)
+    def get_info(city)
+      @service.make_request(city)
     end
   end
 end
