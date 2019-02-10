@@ -19,7 +19,7 @@ RSpec.describe Weather do
 
   describe '#get_info' do
     context 'pass new service' do
-      it_is_asserted_by { expect(@request).to eq(Service.make_request(@city)) }
+      it_is_asserted_by { @request == Service.make_request(@city) }
     end
   end
 end
