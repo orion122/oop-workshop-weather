@@ -1,3 +1,17 @@
 #!/usr/bin/env ruby
 
-require "weather"
+require 'bundler/setup'
+require 'weather'
+require 'slop'
+
+opts = Slop.parse do |o|
+  o.string '-s', '--service', 'a service', delimiter: ' '
+end
+
+# service = opts[:service]
+
+# puts service
+
+puts Weather::Weather.new(service: 'first').get_info(city: 'moscow')
+
+# Weather::Weather.new(service: opts[:service])
