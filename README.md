@@ -23,8 +23,8 @@ Or install it yourself as:
 ## Usage
 
 ```bash
-exe/weather --service apixu --city moscow
-exe/weather --service metaweather --city berlin
+exe/weather --service apixu --city moscow --key apikey
+exe/weather --service metaweather --city berlin --key apikey
 ```
 
 ## Development
