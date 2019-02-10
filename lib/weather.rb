@@ -1,16 +1,21 @@
 require 'weather/version'
-require 'net/http'
+require 'open-uri'
 require 'json'
 
 
 module Weather
   class Metaweather
-    URL = 'https://www.metaweather.com/api/location/search/?query='
+    URL = 'https://www.metaweather.com/api'
 
     def make_request(city)
-      uri = URI(URL + city)
-      response = Net::HTTP.get(uri)
+      location_id = get_location_id(city)
+      response = open("#{URL}/location/#{location_id}").read
       JSON.parse(response)
+    end
+
+    def get_location_id(city)
+      response = open("#{URL}/location/search/?query=#{city}").read
+      JSON.parse(response)[0]['woeid']
     end
   end
 
@@ -19,8 +24,7 @@ module Weather
     URL = 'http://api.apixu.com/v1/forecast.json?key=be33701f8d2a4beeae864603191002&q='
 
     def make_request(city)
-      uri = URI(URL + city)
-      response = Net::HTTP.get(uri)
+      response = open("#{URL}#{city}").read
       JSON.parse(response)
     end
   end
