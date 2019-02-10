@@ -26,7 +26,7 @@ module Weather
     def get_location_id(city)
       uri = URI("https://#{HOST}/api/location/search/?query=#{city}")
       response = http_client.get(uri)
-      JSON.parse(response)[0]['woeid']
+      JSON.parse(response).first['woeid']
     end
   end
 
