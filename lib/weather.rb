@@ -50,18 +50,20 @@ module Weather
 
 
   class Weather
-    SERVICES = {
-      'metaweather' => ::Weather::Metaweather,
-      'apixu' => ::Weather::Apixu
-    }
-
-    def initialize(service_name, key, services = {})
-      services = SERVICES.merge(services)
-      @service = services[service_name].new(key: key)
+    def initialize(service_name: service_name, key: '', services: {})
+      services = services_map(key).merge(services)
+      @service = services[service_name]
     end
 
     def get_info(city)
       @service.make_request(city)
+    end
+
+    def services_map(key)
+      {
+        'metaweather' => ::Weather::Metaweather.new(key: key),
+        'apixu' => ::Weather::Apixu.new(key: key)
+      }
     end
   end
 end

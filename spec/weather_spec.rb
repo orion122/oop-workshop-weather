@@ -7,15 +7,26 @@ RSpec.describe Weather do
       'forecast': '+25'
     }
 
-    class Service
-      def make_request(city)
+    class HttpClient
+      def get(url)
         CITY_INFO
       end
     end
 
+    class Service
+      def initialize(http_client: http_client)
+        @http_client = http_client
+      end
+
+      def make_request(city)
+        @http_client.get("q=#{city}")
+      end
+    end
+
+
     @weather = Weather::Weather.new(
-      'my_service',
-      { 'my_service'=> Service.new }
+      service_name: 'my_service',
+      services: { 'my_service'=> Service.new(http_client: HttpClient.new) }
     )
 
     @city_info = @weather.get_info(CITY)
