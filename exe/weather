@@ -5,13 +5,8 @@ require 'weather'
 require 'slop'
 
 opts = Slop.parse do |o|
-  o.string '-s', '--service', 'a service', delimiter: ' '
+  o.string '-s', '--service', 'a service', default: 'metaweather'
+  o.string '-c', '--city', 'a service', default: 'moscow'
 end
 
-# service = opts[:service]
-
-# puts service
-
-puts Weather::Weather.new(service: 'first').get_info(city: 'moscow')
-
-# Weather::Weather.new(service: opts[:service])
+puts Weather::Weather.new(service_name: opts[:service]).get_info(city: opts[:city])
