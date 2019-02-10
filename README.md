@@ -22,7 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```bash
+exe/weather --service apixu --city moscow
+exe/weather --service metaweather --city berlin
+```
 
 ## Development
 
