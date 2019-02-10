@@ -42,7 +42,6 @@ module Weather
     end
 
     def get_info(city)
-      puts @service
       @service.make_request(city)
     end
   end
